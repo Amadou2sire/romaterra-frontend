@@ -1,53 +1,61 @@
 import React from "react";
 import NavTitle from "./NavTitle";
 
-const Price = () => {
-  const priceList = [
-    {
-      _id: 950,
-      priceOne: 0.0,
-      priceTwo: 49.99,
-    },
-    {
-      _id: 951,
-      priceOne: 50.0,
-      priceTwo: 99.99,
-    },
-    {
-      _id: 952,
-      priceOne: 100.0,
-      priceTwo: 199.99,
-    },
-    {
-      _id: 953,
-      priceOne: 200.0,
-      priceTwo: 399.99,
-    },
-    {
-      _id: 954,
-      priceOne: 400.0,
-      priceTwo: 599.99,
-    },
-    {
-      _id: 955,
-      priceOne: 600.0,
-      priceTwo: 1000.0,
-    },
-  ];
+// Filtre prix dynamique basé sur le min/max des produits chargés.
+// On reçoit priceBounds (min, max) et priceRange ([currentMin, currentMax]).
+// Deux range sliders synchronisés.
+const Price = ({ priceRange, onChangePriceRange, priceBounds }) => {
+  const [min, max] = priceBounds || [0, 1000];
+  const [currentMin, currentMax] = priceRange || [min, max];
+
+  const handleMin = (e) => {
+    const v = Math.min(Number(e.target.value), currentMax);
+    onChangePriceRange([v, currentMax]);
+  };
+  const handleMax = (e) => {
+    const v = Math.max(Number(e.target.value), currentMin);
+    onChangePriceRange([currentMin, v]);
+  };
+
   return (
-    <div className="cursor-pointer">
+    <div>
       <NavTitle title="Shop by Price" icons={false} />
-      <div className="font-titleFont">
-        <ul className="flex flex-col gap-4 text-sm lg:text-base text-[#767676]">
-          {priceList.map((item) => (
-            <li
-              key={item._id}
-              className="border-b-[1px] border-b-[#F0F0F0] pb-2 flex items-center gap-2 hover:text-primeColor hover:border-gray-400 duration-300"
-            >
-              ${item.priceOne.toFixed(2)} - ${item.priceTwo.toFixed(2)}
-            </li>
-          ))}
-        </ul>
+      <div className="font-titleFont flex flex-col gap-3">
+        <div className="flex items-center justify-between text-sm text-[#767676]">
+          <span>{currentMin} DT</span>
+          <span>{currentMax} DT</span>
+        </div>
+
+        {/* Slider MIN */}
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={1}
+          value={currentMin}
+          onChange={handleMin}
+          className="w-full accent-[#884B2C]"
+          aria-label="Minimum price"
+        />
+        {/* Slider MAX */}
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={1}
+          value={currentMax}
+          onChange={handleMax}
+          className="w-full accent-[#884B2C]"
+          aria-label="Maximum price"
+        />
+
+        <button
+          type="button"
+          onClick={() => onChangePriceRange([min, max])}
+          className="self-start text-xs text-[#767676] underline hover:text-[#884B2C]"
+        >
+          Reset
+        </button>
       </div>
     </div>
   );

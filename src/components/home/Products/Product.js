@@ -9,16 +9,14 @@ const Product = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const rootId = String(props.productName)
-    .toLowerCase()
-    .split(" ")
-    .join("");
-
+  // Route by the real MongoDB _id (not the slugified name).
   const handleDetails = () => {
-    navigate(`/product/${rootId}`, {
+    navigate(`/product/${props._id}`, {
       state: { item: props },
     });
   };
+
+  const outOfStock = props.quantityInStock === 0;
 
   return (
     <div className="w-full max-w-[280px] mx-auto">
@@ -38,6 +36,15 @@ const Product = (props) => {
         {props.badge && (
           <div className="absolute top-3 left-3">
             <Badge text="New" />
+          </div>
+        )}
+
+        {/* OUT OF STOCK */}
+        {outOfStock && (
+          <div className="absolute top-3 right-3 bg-[#F4E5C8]/90 border border-[#F4E5C8] px-2 py-1 rounded">
+            <span className="text-[#884B2C] text-xs font-semibold">
+              Out of stock
+            </span>
           </div>
         )}
 
@@ -61,6 +68,7 @@ const Product = (props) => {
 
       {/* ADD TO CART */}
       <button
+        disabled={outOfStock}
         onClick={() =>
           dispatch(
             addToCart({
@@ -74,12 +82,15 @@ const Product = (props) => {
             })
           )
         }
-        className="group mt-4 flex items-center justify-center gap-2 mx-auto
-                   px-10 py-2 rounded-md border border-[#884B2C]
-                   text-[#884B2C] text-sm font-medium
-                   hover:bg-[#A2664E] hover:text-white transition"
+        className={`group mt-4 flex items-center justify-center gap-2 mx-auto
+                   px-10 py-2 rounded-md border text-sm font-medium transition
+                   ${
+                     outOfStock
+                       ? "border-gray-300 text-gray-400 cursor-not-allowed"
+                       : "border-[#884B2C] text-[#884B2C] hover:bg-[#A2664E] hover:text-white"
+                   }`}
       >
-        Add to cart
+        {outOfStock ? "Out of stock" : "Add to cart"}
       </button>
     </div>
   );

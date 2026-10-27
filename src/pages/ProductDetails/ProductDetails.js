@@ -1,103 +1,141 @@
 import React, { useEffect, useState } from "react";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useLocation, useParams } from "react-router-dom";
 import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
 import ProductInfo from "../../components/pageProps/productDetails/ProductInfo";
-import { paginationItems } from "../../constants";
-import { newArrivalProducts } from "../../components/home/NewArrivals/NewArrivals";
-import { specialOfferProducts } from "../../components/home/SpecialOffers/SpecialOffers";
-
-const slugifyProduct = (product) =>
-  String(product?.productName || product?.name || "")
-    .toLowerCase()
-    .split(" ")
-    .join("");
-
-const allProducts = [
-  ...paginationItems,
-  ...newArrivalProducts,
-  ...specialOfferProducts,
-];
+import { useProductById } from "../../api/useApi";
 
 const ProductDetails = () => {
   const location = useLocation();
   const { _id } = useParams();
   const [prevLocation, setPrevLocation] = useState("/");
-  const [productInfo, setProductInfo] = useState({});
-  const [activeImage, setActiveImage] = useState("");
+
+  // If we arrived via in-app navigation, state.item holds the product already
+  // (object from the API, normalized or raw). Otherwise fetch by _id from the
+  // API. The state.item passed from the card is already the backend product
+  // (normalizeProduct keeps the raw object under .raw, but cards from the shop
+  // grid pass normalized props — so we accept either shape here).
+  // Only trust the full backend product (normalizeProduct exposes .raw).
+  // The Shop card passes individual props (no .raw) → we re-fetch by _id.
+  // A direct URL lands with no state.item → we fetch by _id too.
+  const passedItem = location.state?.item;
+  const initialProduct = passedItem?.raw || null;
+
+  const { product: fetchedProduct, loading, error } = useProductById(
+    initialProduct ? null : _id
+  );
+
+  const productInfo = initialProduct || fetchedProduct || {};
 
   useEffect(() => {
-    const selectedProduct =
-      location.state?.item ||
-      allProducts.find((item) => slugifyProduct(item) === _id);
-
-    if (selectedProduct) {
-      setProductInfo(selectedProduct);
-      if (Array.isArray(selectedProduct.images)) {
-        setActiveImage(selectedProduct.images[0]);
-      } else {
-        setActiveImage(selectedProduct.img);
-      }
-    }
     setPrevLocation(location.pathname);
-  }, [location, _id]);
+  }, [location]);
 
-  const images = productInfo.images || [productInfo.img];
-  const productName = productInfo.productName || productInfo.name || "";
+  // Prefer the multi-image gallery; fall back to a single image.
+  const images = Array.isArray(productInfo.images) && productInfo.images.length > 0
+    ? productInfo.images
+    : productInfo.img
+      ? [productInfo.img]
+      : [];
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const firstImage = images[0] || "";
+
+  useEffect(() => {
+    setActiveImageIndex(0);
+  }, [productInfo._id, firstImage]);
+
+  const activeImage = images[activeImageIndex] || firstImage;
+  const productName = productInfo.name || productInfo.productName || "";
 
   return (
     <div className="w-full mx-auto border-b border-gray-300">
       <div className="max-w-container mx-auto px-4">
 
         {/* BREADCRUMB */}
-        <div className="xl:-mt-10 -mt-7">
-          <Breadcrumbs title={productName} prevLocation={prevLocation} />
+        <div>
+          <Breadcrumbs
+            title={productName}
+            prevLocation={prevLocation}
+            titleClassName="leading-[2]"
+          />
         </div>
 
-        {/* PRODUCT CARD */}
-        <div
-          className="w-full grid grid-cols-1 md:grid-cols-2 gap-10 p-8 pb-12 rounded-lg
-                     bg-white border-2"
-          style={{ borderColor: "#884B2C" }}
-        >
+        {loading ? (
+          <div className="p-20 text-center text-gray-500">Loading product...</div>
+        ) : error ? (
+          <div className="p-20 text-center text-gray-500">{error}</div>
+        ) : (
+          /* PRODUCT CARD */
+          <div
+            className="w-full grid grid-cols-1 md:grid-cols-2 gap-10 p-8 pb-12 rounded-lg
+                       bg-white border-2"
+            style={{ borderColor: "#884B2C" }}
+          >
 
-          {/* IMAGE GALLERY */}
-          <div>
-            <div className="w-full h-[420px] border rounded-md overflow-hidden">
-              <img
-                src={activeImage}
-                alt={productName}
-                className="w-full h-full object-cover"
-              />
+            {/* IMAGE GALLERY */}
+            <div>
+              <div className="relative aspect-square w-full overflow-hidden rounded-md border border-gray-200 bg-[#faf9f6]">
+                <img
+                  src={activeImage}
+                  alt={productName}
+                  className="w-full h-full object-contain bg-white"
+                />
+                {images.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setActiveImageIndex((index) => (index - 1 + images.length) % images.length)}
+                      aria-label="Image précédente"
+                      className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#884B2C] shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#884B2C]"
+                    >
+                      <FiChevronLeft size={22} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveImageIndex((index) => (index + 1) % images.length)}
+                      aria-label="Image suivante"
+                      className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#884B2C] shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#884B2C]"
+                    >
+                      <FiChevronRight size={22} />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {images.length > 1 && (
+                <div className="mt-4 flex gap-3 overflow-x-auto pb-2" aria-label="Images du produit">
+                  {images.map((img, index) => (
+                    <button
+                      key={`${img}-${index}`}
+                      type="button"
+                      onClick={() => setActiveImageIndex(index)}
+                      aria-label={`Afficher ${productName}, image ${index + 1}`}
+                      aria-pressed={activeImageIndex === index}
+                      className={`h-20 w-20 shrink-0 overflow-hidden rounded-md border bg-white transition sm:h-24 sm:w-24
+                        ${
+                          activeImageIndex === index
+                            ? "border-[#884B2C] ring-1 ring-[#884B2C]"
+                            : "border-gray-300 hover:border-[#884B2C]"
+                        }`}
+                    >
+                      <img
+                        src={img}
+                        alt={`${productName} ${index + 1}`}
+                        className="h-full w-full object-contain"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="flex gap-4 mt-4">
-              {images.map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveImage(img)}
-                  className={`w-24 h-24 border rounded-md overflow-hidden
-                    ${
-                      activeImage === img
-                        ? "border-[#884B2C]"
-                        : "border-gray-300 hover:border-[#884B2C]"
-                    }`}
-                >
-                  <img
-                    src={img}
-                    alt={`${productName} ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
+            {/* PRODUCT INFO */}
+            <div className="flex flex-col justify-center gap-6">
+              <ProductInfo productInfo={productInfo} />
             </div>
-          </div>
 
-          {/* PRODUCT INFO */}
-          <div className="flex flex-col justify-center gap-6">
-            <ProductInfo productInfo={productInfo} />
           </div>
-
-        </div>
+        )}
       </div>
     </div>
   );

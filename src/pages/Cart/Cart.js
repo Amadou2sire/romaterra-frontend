@@ -6,12 +6,13 @@ import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
 import { resetCart } from "../../redux/orebiSlice";
 import { empty} from "../../assets/images/index";
 import ItemCard from "./ItemCard";
+import { useShippingFee } from "../../api/useApi";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.orebiReducer.products);
-  const [totalAmt, setTotalAmt] = useState("");
-  const [shippingCharge, setShippingCharge] = useState("");
+  const [totalAmt, setTotalAmt] = useState(0);
+  const { shippingFee } = useShippingFee();
   useEffect(() => {
     let price = 0;
     products.map((item) => {
@@ -20,15 +21,6 @@ const Cart = () => {
     });
     setTotalAmt(price);
   }, [products]);
-  useEffect(() => {
-    if (totalAmt <= 200) {
-      setShippingCharge(8);
-    } else if (totalAmt <= 400) {
-      setShippingCharge(5);
-    } else if (totalAmt > 400) {
-      setShippingCharge(0);
-    }
-  }, [totalAmt]);
   return (
     <div className="max-w-container mx-auto px-4">
       <Breadcrumbs title="Cart" />
@@ -81,13 +73,13 @@ const Cart = () => {
                 <p className="flex items-center justify-between border-[1px] border-gray-400 border-b-0 py-1.5 text-lg px-4 font-medium">
                   Delivery charge
                   <span className="font-semibold tracking-wide font-titleFont">
-                    DT {shippingCharge}
+                    {shippingFee === 0 ? "Free" : `DT ${shippingFee}`}
                   </span>
                 </p>
                 <p className="flex items-center justify-between border-[1px] border-gray-400 py-1.5 text-lg px-4 font-medium">
                   Total
                   <span className="font-bold tracking-wide text-lg font-titleFont">
-                    DT {totalAmt + shippingCharge}
+                    DT {totalAmt + shippingFee}
                   </span>
                 </p>
               </div>

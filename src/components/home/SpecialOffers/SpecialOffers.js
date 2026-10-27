@@ -1,179 +1,181 @@
 import React, { useRef } from "react";
 import Slider from "react-slick";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/orebiSlice";
-
-import {
-  spfOne,
-  spfTwo,
-  spfThree,
-  spfFour,
-  arrow1,
-  arrow2,
-  arrow,
-  pbg,
-} from "../../../assets/images";
+import { useProducts } from "../../../api/useApi";
+import { FiArrowUpRight, FiChevronLeft, FiChevronRight, FiShoppingBag } from "react-icons/fi";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-export const specialOfferProducts = [
-  { _id: "201", img: spfOne, name: "Cap for Boys", price: "35", state: "out" },
-  { _id: "202", img: spfTwo, name: "Tea Table", price: "180", state: "in" },
-  { _id: "203", img: spfThree, name: "Headphones", price: "25", state: "in" },
-  { _id: "204", img: spfFour, name: "Sun Glasses", price: "220", state: "out" },
-  { _id: "205", img: spfOne, name: "Decor Vase", price: "95", state: "in" },
-  { _id: "206", img: spfTwo, name: "Modern Lamp", price: "140", state: "in" },
-];
 
 const SpecialOffers = () => {
   const sliderRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { products } = useProducts();
+
+  // Products flagged "Promo" first; fallback to the latest products so the
+  // block never renders empty when no promo exists yet.
+  const promoItems = products.filter((p) => p.status === "Promo");
+  const items = (promoItems.length > 0 ? promoItems : [...products]
+    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+  ).slice(0, 12);
 
   const settings = {
     arrows: false,
-    infinite: true,
-    speed: 600,
+    infinite: items.length > 6,
+    speed: 450,
     slidesToShow: 3,
-    slidesToScroll: 3,
-    rows: 2,
+    slidesToScroll: 1,
+    swipe: true,
+    swipeToSlide: true,
+    touchMove: true,
+    draggable: true,
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 2, rows: 2 } },
-      { breakpoint: 640, settings: { slidesToShow: 1, rows: 2 } },
+      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 640, settings: { slidesToShow: 1 } },
     ],
   };
 
   const goToDetails = (product) => {
-    const id = product.name.toLowerCase().split(" ").join("");
-    navigate(`/product/${id}`, { state: { item: product } });
+    navigate(`/product/${product._id}`, { state: { item: product } });
   };
 
   return (
-    <section className="w-full py-32">
-      {/* ===== TITLE ===== */}
-      <div className="flex justify-center mb-8">
-        <svg viewBox="0 0 1400 300" className="w-full max-w-6xl">
-          <text
-            x="50%"
-            y="40%"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill="white"
-            stroke="#884B2C"
-            strokeWidth="18"
-            paintOrder="stroke fill"
-            style={{
-              fontFamily: "'Style Script', cursive",
-              fontSize: "220px",
-            }}
-          >
-            Our Products
-          </text>
-        </svg>
-      </div>
-
-      {/* ===== BACKGROUND (MEDIUM) ===== */}
-      <div
-        className="relative bg-center bg-no-repeat py-24"
-        style={{
-          backgroundImage: `url(${pbg})`,
-          backgroundSize: "110%", // ⭐ medium size
-        }}
-      >
-        <div className="max-w-[1200px] mx-auto px-8 pt-16">
-          {/* ===== SLIDER ===== */}
-          <Slider ref={sliderRef} {...settings}>
-            {specialOfferProducts.map((item, index) => (
-              <div key={index} className="p-4 text-center">
-                {/* IMAGE */}
-                <div
-                  className="relative mx-auto w-[250px] h-[250px] overflow-hidden rounded-md border border-[#F4E5C8] group cursor-pointer"
-                  onClick={() => goToDetails(item)}
-                >
-                  <img
-                    src={item.img}
-                    alt={item.name}
-                    className="w-full h-full object-cover"
-                  />
-
-                  {/* HOVER */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                    <span className="text-white text-sm font-semibold">
-                      View Details
-                    </span>
-                  </div>
-
-                  {/* OUT OF STOCK */}
-                  {item.state === "out" && (
-                    <div className="absolute top-2 right-2 bg-[#F4E5C8]/50 border border-[#F4E5C8] px-2 py-1 rounded">
-                      <span className="text-white text-md font-semibold">
-                        Out of stock
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* NAME */}
-                <h3 className="mt-3 text-base font-semibold text-black">
-                  {item.name}
-                </h3>
-
-                {/* PRICE */}
-                <p className="text-sm text-black">{item.price} DT</p>
-
-                {/* ADD TO CART */}
+    <section className="w-full bg-[#FBF7ED] py-12 sm:py-16 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <header className="mb-6 flex flex-wrap items-end justify-between gap-4 sm:mb-8">
+          <div>
+            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#9b6a4f]">
+              RomaTerra selection
+            </p>
+            <h2 className="text-2xl font-semibold text-[#33271f] sm:text-3xl">
+              Special Offers
+            </h2>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/offer"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-[#884B2C] transition hover:text-[#5f321f]"
+            >
+              See all special offers <FiArrowUpRight size={16} />
+            </Link>
+            {items.length > 1 && (
+              <div className="hidden items-center gap-1 sm:flex">
                 <button
-                  disabled={item.state === "out"}
-                  onClick={() =>
-                    dispatch(
-                      addToCart({
-                        _id: item._id,
-                        name: item.name,
-                        quantity: 1,
-                        image: item.img,
-                        price: item.price,
-                      })
-                    )
-                  }
-                  className={`group mt-3 flex items-center gap-2 px-16 py-1 rounded-md mx-auto transition text-sm
-                    ${
-                      item.state === "out"
-                        ? "border border-gray-400 text-gray-400 cursor-not-allowed"
-                        : "border border-[#884B2C] text-[#884B2C] hover:bg-[#884B2C] hover:text-white"
-                    }`}
+                  type="button"
+                  onClick={() => sliderRef.current?.slickPrev()}
+                  aria-label="Previous products"
+                  className="flex h-9 w-9 items-center justify-center rounded border border-[#d8cfc5] text-[#6c5142] transition hover:border-[#884B2C] hover:text-[#884B2C]"
                 >
-                  Add to cart
-                  {item.state !== "out" && (
-                    <span className="relative w-4 h-4">
-                      <img
-                        src={arrow1}
-                        alt=""
-                        className="absolute inset-0 w-4 h-4 opacity-100 group-hover:opacity-0 transition"
-                      />
-                      <img
-                        src={arrow}
-                        alt=""
-                        className="absolute inset-0 w-4 h-4 opacity-0 group-hover:opacity-100 transition"
-                      />
-                    </span>
-                  )}
+                  <FiChevronLeft size={20} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => sliderRef.current?.slickNext()}
+                  aria-label="Next products"
+                  className="flex h-9 w-9 items-center justify-center rounded border border-[#d8cfc5] text-[#6c5142] transition hover:border-[#884B2C] hover:text-[#884B2C]"
+                >
+                  <FiChevronRight size={20} />
                 </button>
               </div>
-            ))}
-          </Slider>
+            )}
+          </div>
+        </header>
 
-          {/* ===== ARROWS ===== */}
-<div className="max-w-[1 00px] mx-auto px-8 -mt-6 flex justify-end gap-1">
-  <button onClick={() => sliderRef.current?.slickPrev()}>
-    <img src={arrow2} alt="Previous" className="w-10 h-10" />
-  </button>
-  <button onClick={() => sliderRef.current?.slickNext()}>
-    <img src={arrow1} alt="Next" className="w-10 h-10" />
-  </button>
-</div>
-        </div>
+        {items.length === 0 ? (
+          <p className="border-y border-[#e8dfd4] py-10 text-center text-sm text-[#74695f]">
+            No products available yet.
+          </p>
+        ) : (
+          <Slider ref={sliderRef} {...settings}>
+            {items.map((item, index) => {
+              const out = item.quantityInStock === 0;
+              return (
+                <div key={item._id || index} className="h-full px-2 pb-2">
+                  <article className="h-full overflow-hidden border border-[#e7dfd5] bg-white">
+                    <button
+                      type="button"
+                      onClick={() => goToDetails(item)}
+                      className="group relative block aspect-square w-full overflow-hidden bg-[#f2eee7]"
+                      aria-label={`View ${item.productName}`}
+                    >
+                      <img
+                        src={item.img}
+                        alt={item.productName}
+                        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                      />
+                      {item.status === "Promo" && (
+                        <span className="absolute left-3 top-3 bg-white px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-[#884B2C]">
+                          Promo
+                        </span>
+                      )}
+                      {out && (
+                        <span className="absolute bottom-3 left-3 bg-white/95 px-2.5 py-1 text-xs font-medium text-[#5e5750]">
+                          Out of stock
+                        </span>
+                      )}
+                    </button>
+
+                    <div className="p-4 sm:p-5">
+                      <button
+                        type="button"
+                        onClick={() => goToDetails(item)}
+                        className="block w-full truncate text-left text-base font-semibold text-[#33271f] hover:text-[#884B2C]"
+                      >
+                        {item.productName}
+                      </button>
+                      <div className="mt-2 flex items-center justify-between gap-3">
+                        <p className="text-sm text-[#5f5147]">{item.price} DT</p>
+                        <button
+                          type="button"
+                          disabled={out}
+                          onClick={() =>
+                            dispatch(
+                              addToCart({
+                                _id: item._id,
+                                name: item.productName,
+                                quantity: 1,
+                                image: item.img,
+                                price: item.price,
+                              }),
+                            )
+                          }
+                          aria-label={out ? "Out of stock" : `Add ${item.productName} to cart`}
+                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded border border-[#884B2C] text-[#884B2C] transition hover:bg-[#884B2C] hover:text-white disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400"
+                        >
+                          <FiShoppingBag size={17} />
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              );
+            })}
+          </Slider>
+        )}
+
+        {items.length > 1 && (
+          <div className="mt-3 flex justify-center gap-1 sm:hidden">
+            <button
+              type="button"
+              onClick={() => sliderRef.current?.slickPrev()}
+              aria-label="Previous products"
+              className="flex h-9 w-9 items-center justify-center rounded border border-[#d8cfc5] text-[#6c5142]"
+            >
+              <FiChevronLeft size={20} />
+            </button>
+            <button
+              type="button"
+              onClick={() => sliderRef.current?.slickNext()}
+              aria-label="Next products"
+              className="flex h-9 w-9 items-center justify-center rounded border border-[#d8cfc5] text-[#6c5142]"
+            >
+              <FiChevronRight size={20} />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
