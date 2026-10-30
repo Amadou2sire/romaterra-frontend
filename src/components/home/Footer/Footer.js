@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Image from "../../designLayouts/Image";
 import { FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 import {
@@ -95,6 +96,14 @@ const Footer = () => {
           }}
         >
           © 2025 RomaTerra.tn All rights reserved
+        </p>
+        <p
+          className="text-sm text-center mt-2"
+          style={{ fontFamily: "'Syne', sans-serif" }}
+        >
+          <Link to="/privacy" className="text-[#884B2C] underline hover:opacity-70">
+            Privacy Policy
+          </Link>
         </p>
 
       </div>
