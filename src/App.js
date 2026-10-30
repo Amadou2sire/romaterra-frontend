@@ -5,7 +5,10 @@ import {
   createRoutesFromElements,
   Route,
   ScrollRestoration,
+  useLocation,
 } from "react-router-dom";
+import { useEffect } from "react";
+import { trackPageView } from "./analytics/metaPixel";
 import Footer from "./components/home/Footer/Footer";
 import Header from "./components/home/Header/Header";
 import HeaderBottom from "./components/home/Header/HeaderBottom";
@@ -21,6 +24,13 @@ import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Shop from "./pages/Shop/Shop";
 
 const Layout = () => {
+  const location = useLocation();
+
+  // One Meta Pixel PageView per route change (the SPA never reloads the page).
+  useEffect(() => {
+    trackPageView();
+  }, [location.pathname]);
+
   return (
     <div>
       <Header />

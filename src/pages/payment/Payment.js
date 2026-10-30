@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
 import { resetCart } from "../../redux/orebiSlice";
 import axiosInstance from "../../api/axiosInstance";
 import { useShippingFee } from "../../api/useApi";
+import { trackEvent, CURRENCY } from "../../analytics/metaPixel";
 
 const Payment = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,20 @@ const Payment = () => {
   );
   const { shippingFee } = useShippingFee();
   const grandTotal = totalAmt + shippingFee;
+
+  // Meta Pixel: checkout page opened with a non-empty cart.
+  useEffect(() => {
+    if (cart.length === 0) return;
+    trackEvent("InitiateCheckout", {
+      content_ids: cart.map((item) => item._id),
+      content_type: "product",
+      num_items: cart.reduce((sum, item) => sum + item.quantity, 0),
+      value: totalAmt,
+      currency: CURRENCY,
+    });
+    // Once per visit of the page, not on every cart change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,7 +81,20 @@ const Payment = () => {
         customerPhone: form.customerPhone.trim(),
         shippingAddress: form.shippingAddress.trim(),
       };
-      await axiosInstance.post("/orders", body);
+      const { data: order } = await axiosInstance.post("/orders", body);
+      // Use the server total (price recomputed + shipping) and the order id
+      // as eventID so Meta can deduplicate if a server-side event is added later.
+      trackEvent(
+        "Purchase",
+        {
+          content_ids: cart.map((item) => item._id),
+          content_type: "product",
+          num_items: cart.reduce((sum, item) => sum + item.quantity, 0),
+          value: Number(order?.totalAmount ?? grandTotal),
+          currency: CURRENCY,
+        },
+        order?._id ? { eventID: String(order._id) } : undefined
+      );
       dispatch(resetCart());
       setSuccess(true);
     } catch (err) {
