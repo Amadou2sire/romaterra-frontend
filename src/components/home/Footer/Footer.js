@@ -95,7 +95,7 @@ const Footer = () => {
             color: "#884B2C",
           }}
         >
-          © 2025 RomaTerra.tn All rights reserved
+          © {new Date().getFullYear()} artifact-ceramics.tn. All rights reserved
         </p>
         <p
           className="text-sm text-center mt-2"
