@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HiOutlineChevronRight } from "react-icons/hi";
 import { useLocation } from "react-router-dom";
 
-const Breadcrumbs = ({ prevLocation, title }) => {
+const Breadcrumbs = ({ prevLocation, title, titleClassName = "" }) => {
   const location = useLocation();
   const [locationPath, setLocationPath] = useState("");
   useEffect(() => {
@@ -11,7 +11,7 @@ const Breadcrumbs = ({ prevLocation, title }) => {
 
   return (
     <div className="w-full py-10 xl:py-10 flex flex-col gap-3">
-      <h1 className="text-5xl text-primeColor font-titleFont font-bold">
+      <h1 className={`text-5xl text-primeColor font-titleFont font-bold ${titleClassName}`}>
         {title}
       </h1>
       <p className="text-sm font-normal text-lightText capitalize flex items-center">

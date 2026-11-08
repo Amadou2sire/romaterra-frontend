@@ -1,16 +1,27 @@
 import React from "react";
-import Brand from "./shopBy/Brand";
 import Category from "./shopBy/Category";
-import Color from "./shopBy/Color";
 import Price from "./shopBy/Price";
 
-const ShopSideNav = () => {
+const ShopSideNav = ({
+  categories,
+  selectedCategory,
+  onSelectCategory,
+  priceRange,
+  onChangePriceRange,
+  priceBounds,
+}) => {
   return (
     <div className="w-full flex flex-col gap-6">
-      <Category icons={false} />
-      <Color />
-      <Brand />
-      <Price />
+      <Category
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onSelectCategory={onSelectCategory}
+      />
+      <Price
+        priceRange={priceRange}
+        onChangePriceRange={onChangePriceRange}
+        priceBounds={priceBounds}
+      />
     </div>
   );
 };

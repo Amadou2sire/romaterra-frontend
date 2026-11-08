@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Image from "../../designLayouts/Image";
 import { FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 import {
@@ -40,7 +41,7 @@ const Footer = () => {
           <div
             className="text-center"
             style={{
-              fontFamily: "'Syne', sans-serif",
+              fontFamily: "'Montserrat', sans-serif",
               color: "#884B2C",
             }}
           >
@@ -90,11 +91,19 @@ const Footer = () => {
         <p
           className="text-xl text-center mt-6"
           style={{
-            fontFamily: "'Syne', sans-serif",
+            fontFamily: "'Montserrat', sans-serif",
             color: "#884B2C",
           }}
         >
-          © 2025 RomaTerra.tn All rights reserved
+          © {new Date().getFullYear()} artifact-ceramics.tn. All rights reserved
+        </p>
+        <p
+          className="text-sm text-center mt-2"
+          style={{ fontFamily: "'Montserrat', sans-serif" }}
+        >
+          <Link to="/privacy" className="text-[#884B2C] underline hover:opacity-70">
+            Privacy Policy
+          </Link>
         </p>
 
       </div>

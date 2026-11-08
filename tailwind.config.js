@@ -17,8 +17,9 @@ module.exports = {
         xl: "1280px",
       },
       fontFamily: {
-        bodyFont: ["DM Sans", "sans-serif"],
-        titleFont: ["Poppins", "sans-serif"],
+        bodyFont: ["Montserrat", "sans-serif"],
+        titleFont: ["Montserrat", "sans-serif"],
+        descFont: ["DM Sans", "sans-serif"],
       },
       colors: {
         primeColor: "#262626",
