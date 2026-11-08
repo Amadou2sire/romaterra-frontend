@@ -11,7 +11,7 @@ const sections = [
       <p>
         RomaTerra is a handmade ceramics workshop based in Moknine, Tunisia. We are
         responsible for the personal data collected through this website
-        (romaterra.tn). You can reach us by phone at{" "}
+        (artifact-ceramics.tn). You can reach us by phone at{" "}
         <a href="tel:+21695715400" className="text-[#884B2C] underline">
           +216 95 715 400
         </a>{" "}
