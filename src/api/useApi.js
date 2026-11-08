@@ -59,6 +59,24 @@ export const useShippingFee = () => {
   return { shippingFee, shippingLoading };
 };
 
+// Home banner slides (images and videos), managed from the dashboard.
+export const useBanner = () => {
+  const [slides, setSlides] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    axiosInstance
+      .get("/settings/banner")
+      .then(({ data }) => { if (active) setSlides(data.slides || []); })
+      .catch(() => {})
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
+
+  return { slides, loading };
+};
+
 export const useProducts = () => {
   const [products, setProducts] = useState(productsCache || []);
   const [loading, setLoading] = useState(!productsCache);

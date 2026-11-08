@@ -178,7 +178,7 @@ const Privacy = () => {
         <h1 className="mb-6 text-3xl font-semibold text-[#884B2C] sm:text-4xl">
           Privacy Policy
         </h1>
-        <p className="mb-10 text-base leading-8 text-[#493b31]">
+        <p className="font-descFont mb-10 text-base leading-8 text-[#493b31]">
           This page explains what personal data we collect when you visit our website or
           place an order, why we collect it, and how you can control it.
         </p>
@@ -189,7 +189,7 @@ const Privacy = () => {
               <h2 className="mb-3 text-xl font-semibold text-[#33271f]">
                 {section.title}
               </h2>
-              <div className="text-sm leading-7 text-[#67594f] sm:text-base sm:leading-8">
+              <div className="font-descFont text-sm leading-7 text-[#67594f] sm:text-base sm:leading-8">
                 {section.body}
               </div>
             </section>

@@ -68,7 +68,7 @@ const NewArrivals = () => {
             stroke="#884B2C"
             strokeWidth="12"
             paintOrder="stroke fill"
-            style={{ fontFamily: "'Style Script', cursive", fontSize: "180px" }}
+            style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "130px" }}
           >
             New Products
           </text>

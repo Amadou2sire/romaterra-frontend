@@ -41,7 +41,7 @@ const Footer = () => {
           <div
             className="text-center"
             style={{
-              fontFamily: "'Syne', sans-serif",
+              fontFamily: "'Montserrat', sans-serif",
               color: "#884B2C",
             }}
           >
@@ -91,7 +91,7 @@ const Footer = () => {
         <p
           className="text-xl text-center mt-6"
           style={{
-            fontFamily: "'Syne', sans-serif",
+            fontFamily: "'Montserrat', sans-serif",
             color: "#884B2C",
           }}
         >
@@ -99,7 +99,7 @@ const Footer = () => {
         </p>
         <p
           className="text-sm text-center mt-2"
-          style={{ fontFamily: "'Syne', sans-serif" }}
+          style={{ fontFamily: "'Montserrat', sans-serif" }}
         >
           <Link to="/privacy" className="text-[#884B2C] underline hover:opacity-70">
             Privacy Policy

@@ -179,7 +179,7 @@ const Collections = () => {
                       <FiArrowUpRight className="mt-1 shrink-0 text-[#884B2C] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" size={18} />
                     </div>
                     {collection.description && (
-                      <p className="mt-2 line-clamp-3 text-sm leading-6 text-[#74695f]">
+                      <p className="font-descFont mt-2 line-clamp-3 text-sm leading-6 text-[#74695f]">
                         {collection.description}
                       </p>
                     )}

@@ -79,8 +79,8 @@ const Sale = () => {
               strokeWidth="12"
               paintOrder="stroke fill"
               style={{
-                fontFamily: "'Style Script', cursive",
-                fontSize: "180px",
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: "130px",
               }}
             >
               Our Collections
@@ -115,7 +115,7 @@ const Sale = () => {
                 <h3
                   className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center"
                   style={{
-                    fontFamily: "'Ysabeau', sans-serif",
+                    fontFamily: "'Montserrat', sans-serif",
                     color: "#884B2C",
                     WebkitTextStroke: "3px #F4E5C8",
                   }}
@@ -143,7 +143,7 @@ const Sale = () => {
                   <h3
                     className="text-3xl md:text-4xl lg:text-5xl font-bold"
                     style={{
-                      fontFamily: "'Ysabeau', sans-serif",
+                      fontFamily: "'Montserrat', sans-serif",
                       color: "#884B2C",
                       WebkitTextStroke: "2.5px #F4E5C8",
                     }}
@@ -169,7 +169,7 @@ const Sale = () => {
                   <h3
                     className="text-3xl md:text-4xl lg:text-5xl font-bold"
                     style={{
-                      fontFamily: "'Ysabeau', sans-serif",
+                      fontFamily: "'Montserrat', sans-serif",
                       color: "#884B2C",
                       WebkitTextStroke: "2.5px #F4E5C8",
                     }}

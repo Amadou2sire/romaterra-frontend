@@ -163,7 +163,7 @@ const Payment = () => {
       <div className="pb-20">
         <h1
           className="text-3xl font-semibold text-[#884B2C] my-6"
-          style={{ fontFamily: "'Style Script', cursive" }}
+          style={{ fontFamily: "'Montserrat', sans-serif" }}
         >
           Paiement à la livraison
         </h1>

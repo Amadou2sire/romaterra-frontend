@@ -162,7 +162,7 @@ const HeaderBottom = () => {
                           <div className="min-w-0 flex-1">
                             <p className="font-semibold truncate">{c.name}</p>
                             {c.description && (
-                              <p className="text-xs text-gray-500 truncate">
+                              <p className="font-descFont text-xs text-gray-500 truncate">
                                 {c.description}
                               </p>
                             )}
@@ -209,7 +209,7 @@ const HeaderBottom = () => {
                           <div className="min-w-0 flex-1">
                             <p className="font-semibold truncate">{item.productName}</p>
                             {item.categoryName && (
-                              <p className="text-xs text-gray-500 truncate">
+                              <p className="font-descFont text-xs text-gray-500 truncate">
                                 {item.categoryName}
                               </p>
                             )}

@@ -33,7 +33,7 @@ const ProductInfo = ({ productInfo }) => {
       )}
 
       {/* DESCRIPTION */}
-      <p className="text-base text-gray-600">{productInfo.description}</p>
+      <p className="font-descFont text-base text-gray-600">{productInfo.description}</p>
 
       {/* <p className="text-sm text-gray-500">Be the first to leave a review.</p> */}
 

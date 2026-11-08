@@ -53,11 +53,11 @@ const Contact = () => {
             </p>
             <h1
               className="mb-5 text-5xl leading-tight text-[#884B2C] sm:text-6xl"
-              style={{ fontFamily: "'Style Script', cursive" }}
+              style={{ fontFamily: "'Montserrat', sans-serif" }}
             >
               Let’s talk
             </h1>
-            <p className="max-w-md text-base leading-7 text-[#382c25] sm:text-lg sm:leading-8">
+            <p className="font-descFont max-w-md text-base leading-7 text-[#382c25] sm:text-lg sm:leading-8">
               Questions about a piece, an order, or a custom creation? Send us a note. We’d love to hear what you have in mind.
             </p>
 

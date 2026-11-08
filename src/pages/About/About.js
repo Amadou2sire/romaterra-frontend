@@ -34,14 +34,14 @@ const About = () => {
               </p>
               <h1
                 className="mb-5 text-6xl leading-none text-[#884B2C] sm:text-7xl"
-                style={{ fontFamily: "'Style Script', cursive" }}
+                style={{ fontFamily: "'Montserrat', sans-serif" }}
               >
                 Our Story
               </h1>
               <p className="mb-5 max-w-xl text-xl font-medium leading-8 text-[#3f3026] sm:text-2xl sm:leading-9">
                 Where clay becomes story.
               </p>
-              <p className="max-w-xl text-base leading-8 text-[#493b31] sm:text-lg sm:leading-9">
+              <p className="font-descFont max-w-xl text-base leading-8 text-[#493b31] sm:text-lg sm:leading-9">
                 Inspired by nature and tradition, we shape timeless pieces by hand. Each creation carries its own identity, celebrating imperfection, authenticity and the beauty of slow making. Made to bring warmth and character into modern living spaces.
               </p>
               <div className="mt-8 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.12em] text-[#884B2C]">
@@ -65,17 +65,17 @@ const About = () => {
             <article>
               <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#9b6a4f]">01 · The material</p>
               <h3 className="mb-2 text-lg font-semibold text-[#33271f]">Nature, as a starting point</h3>
-              <p className="text-sm leading-7 text-[#67594f]">The character of clay guides every form, texture and finish.</p>
+              <p className="font-descFont text-sm leading-7 text-[#67594f]">The character of clay guides every form, texture and finish.</p>
             </article>
             <article>
               <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#9b6a4f]">02 · The making</p>
               <h3 className="mb-2 text-lg font-semibold text-[#33271f]">Shaped by hand</h3>
-              <p className="text-sm leading-7 text-[#67594f]">Small details and natural variations make each piece its own.</p>
+              <p className="font-descFont text-sm leading-7 text-[#67594f]">Small details and natural variations make each piece its own.</p>
             </article>
             <article>
               <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#9b6a4f]">03 · The feeling</p>
               <h3 className="mb-2 text-lg font-semibold text-[#33271f]">A place in your home</h3>
-              <p className="text-sm leading-7 text-[#67594f]">Ceramics made to bring warmth and character to everyday spaces.</p>
+              <p className="font-descFont text-sm leading-7 text-[#67594f]">Ceramics made to bring warmth and character to everyday spaces.</p>
             </article>
           </div>
         </section>
